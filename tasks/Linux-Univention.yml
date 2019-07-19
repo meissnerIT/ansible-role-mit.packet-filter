@@ -1,0 +1,7 @@
+---
+# common tasks for all machines
+
+- name: Ensure iptables chain mit-uis is installed
+  shell: iptables -n --list | grep -q "Chain mit-uis"
+  changed_when: no
+

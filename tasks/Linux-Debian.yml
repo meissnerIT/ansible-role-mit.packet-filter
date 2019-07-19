@@ -1,0 +1,26 @@
+---
+# common tasks for all machines
+
+- include_vars: "{{ item }}"
+  with_first_found:
+    - "../vars/{{ ansible_distribution }}-{{ ansible_distribution_major_version | int}}.yml"
+    - "../vars/{{ ansible_distribution }}.yml"
+    - "../vars/{{ ansible_os_family }}.yml"
+    - "../vars/default.yml"
+  when: netfilter_persistent_service_name is not defined
+
+- name: "Ensure iptables-persistent is installed"
+  apt: pkg=iptables-persistent
+       state=latest
+       update_cache=yes
+       cache_valid_time=3600
+
+- name: Update ipv4 rules
+  template:
+    src: '{{ iptables_persistent_rules_v4 }}'
+    dest: /etc/iptables/rules.v4
+    mode: 0640
+    # Problem: For monheim we want to replace the files for dmz server but not for mit-servers
+    force: no
+  notify: restart netfilter-persistent
+

@@ -1,0 +1,7 @@
+---
+
+# Include distribution specific tasks, e.g. UCS will force mit-uis rules to be installed
+- include_tasks: "{{ item }}"
+  with_first_found:
+    - "{{ ansible_system }}-{{ ansible_lsb.id }}.yml"
+
