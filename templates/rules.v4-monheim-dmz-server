@@ -23,6 +23,11 @@ COMMIT
 # web05 forwards http requests to web04
 -A 17668-server -s 192.168.7.13/32 -p tcp -m multiport --dports 22,8000,8001 -j ACCEPT
 {% endif %}
+{% if inventory_hostname == 'web05.monheim.de' %}
+#2019-08-12, mm: EE requested monheim-entdecken.de -> monheimer-kulturwerke.de (web03 -> web05)
+-A 17668-server -s 192.168.7.18/32 -p tcp --dport 443 -j ACCEPT
+-A 17668-server -s 192.168.7.21/32 -p tcp --dport 443 -j ACCEPT
+{% endif %}
 {% if inventory_hostname == 'schildweb.monheim.intern' %}
 #19956: Zugriff von pcs01 auf schildweb
 -A 17668-server -s 192.168.7.37/32 -p tcp -m multiport --dports 80,443 -j ACCEPT
