@@ -19,6 +19,12 @@ COMMIT
 -A INPUT ! -i lo -s 192.168.7.0/24 -j 17668-server
 -A 17668-server -s 192.168.7.0/24 -p tcp -m state --state RELATED,ESTABLISHED -j ACCEPT
 -A 17668-server -s 192.168.7.10/32 -p tcp -m tcp --sport 25 -j ACCEPT
+{% if inventory_hostname == 'web03.monheim.de' %}
+#2019-08-12, mm: EE requested monheimer-kulturwerke.de -> monheim-entdecken.de (web05 -> web03)
+-A 17668-server -s 192.168.7.13/32 -p tcp -m multiport --dports 80,443 -j ACCEPT
+-A 17668-server -s 192.168.7.27/32 -p tcp --dport 443 -j ACCEPT
+-A 17668-server -s 192.168.7.30/32 -p tcp -m multiport --dports 80,443 -j ACCEPT
+{% endif %}
 {% if inventory_hostname == 'web04.monheim.intern' %}
 # web05 forwards http requests to web04
 -A 17668-server -s 192.168.7.13/32 -p tcp -m multiport --dports 22,8000,8001 -j ACCEPT
