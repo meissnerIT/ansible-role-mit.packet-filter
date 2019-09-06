@@ -22,8 +22,11 @@ COMMIT
 {% if inventory_hostname == 'web03.monheim.de' %}
 #2019-08-12, mm: EE requested monheimer-kulturwerke.de -> monheim-entdecken.de (web05 -> web03)
 -A 17668-server -s 192.168.7.13/32 -p tcp -m multiport --dports 80,443 -j ACCEPT
--A 17668-server -s 192.168.7.27/32 -p tcp --dport 443 -j ACCEPT
+-A 17668-server -s 192.168.7.27/32 -p tcp -m tcp --dport 443 -j ACCEPT
 -A 17668-server -s 192.168.7.30/32 -p tcp -m multiport --dports 80,443 -j ACCEPT
+# web07 -> web03:22 (rsync www.monheim.de)
+# web07 -> web03:443 (www.monheim.de -> www.monheim-entdecken.de)
+-A 17668-server -s 192.168.7.42/32 -p tcp -m multiport --dports 22,443 -j ACCEPT
 {% endif %}
 {% if inventory_hostname == 'web04.monheim.intern' %}
 # web05 forwards http requests to web04
@@ -33,6 +36,9 @@ COMMIT
 #2019-08-12, mm: EE requested monheim-entdecken.de -> monheimer-kulturwerke.de (web03 -> web05)
 -A 17668-server -s 192.168.7.18/32 -p tcp --dport 443 -j ACCEPT
 -A 17668-server -s 192.168.7.21/32 -p tcp --dport 443 -j ACCEPT
+{% endif %}
+{% if inventory_hostname == 'web07.monheim.de' %}
+-A 17668-server -s 192.168.7.27/32 -p tcp --dport 443 -j ACCEPT
 {% endif %}
 {% if inventory_hostname == 'schildweb.monheim.intern' %}
 #19956: Zugriff von pcs01 auf schildweb
