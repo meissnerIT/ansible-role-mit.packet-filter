@@ -33,12 +33,18 @@ COMMIT
 -A 17668-server -s 192.168.7.13/32 -p tcp -m multiport --dports 22,8000,8001 -j ACCEPT
 {% endif %}
 {% if inventory_hostname == 'web05.monheim.de' %}
-#2019-08-12, mm: EE requested monheim-entdecken.de -> monheimer-kulturwerke.de (web03 -> web05)
+#2019-08-12, mm: EE requested monheim-entdecken.de -> monheimer-kulturwerke.de (web03/web07 -> web05)
 -A 17668-server -s 192.168.7.18/32 -p tcp --dport 443 -j ACCEPT
 -A 17668-server -s 192.168.7.21/32 -p tcp --dport 443 -j ACCEPT
+-A 17668-server -s 192.168.7.42/32 -p tcp --dport 443 -j ACCEPT
 {% endif %}
 {% if inventory_hostname == 'web07.monheim.de' %}
--A 17668-server -s 192.168.7.27/32 -p tcp --dport 443 -j ACCEPT
+#2019-09-09, mm: www.monheim-entdecken.de -> www.monheim.de (web03/web05 -> web07)
+-A 17668-server -s 192.168.7.13/32 -p tcp -m multiport --dports 443 -j ACCEPT
+-A 17668-server -s 192.168.7.18/32 -p tcp -m multiport --dports 80,443 -j ACCEPT
+-A 17668-server -s 192.168.7.21/32 -p tcp -m multiport --dports 80,443 -j ACCEPT
+# web06 -> web07
+-A 17668-server -s 192.168.7.27/32 -p tcp -m tcp --dport 443 -j ACCEPT
 {% endif %}
 {% if inventory_hostname == 'schildweb.monheim.intern' %}
 #19956: Zugriff von pcs01 auf schildweb
