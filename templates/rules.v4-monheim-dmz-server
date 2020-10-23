@@ -5,11 +5,6 @@
 :INPUT ACCEPT [0:0]
 :OUTPUT ACCEPT [0:0]
 :POSTROUTING ACCEPT [0:0]
-{% if inventory_hostname == 'web05.monheim.de' %}
-#20030: Enable port forwarding web05:4022 -> web04:22
--A PREROUTING -p tcp -m tcp --dport 4022 -j DNAT --to-destination 192.168.7.12:22
--A POSTROUTING -d 192.168.7.12/32 -p tcp -m tcp --dport 22 -j SNAT --to-source 192.168.7.13
-{% endif %}
 COMMIT
 *filter
 :INPUT ACCEPT [0:0]
@@ -19,24 +14,12 @@ COMMIT
 -A INPUT ! -i lo -s 192.168.7.0/24 -j 17668-server
 -A 17668-server -s 192.168.7.0/24 -p tcp -m state --state RELATED,ESTABLISHED -j ACCEPT
 -A 17668-server -s 192.168.7.10/32 -p tcp -m tcp --sport 25 -j ACCEPT
-{% if inventory_hostname == 'web03.monheim.de' %}
-#2019-08-12, mm: EE requested monheimer-kulturwerke.de -> monheim-entdecken.de (web05 -> web03)
--A 17668-server -s 192.168.7.13/32 -p tcp -m multiport --dports 80,443 -j ACCEPT
--A 17668-server -s 192.168.7.27/32 -p tcp -m tcp --dport 443 -j ACCEPT
--A 17668-server -s 192.168.7.30/32 -p tcp -m multiport --dports 80,443 -j ACCEPT
-# web07 -> web03:22 (rsync www.monheim.de)
-# web07 -> web03:443 (www.monheim.de -> www.monheim-entdecken.de)
--A 17668-server -s 192.168.7.42/32 -p tcp -m multiport --dports 22,443 -j ACCEPT
-{% endif %}
-{% if inventory_hostname == 'web04.monheim.intern' %}
-# web05 forwards http requests to web04
--A 17668-server -s 192.168.7.13/32 -p tcp -m multiport --dports 22,8000,8001 -j ACCEPT
-{% endif %}
 {% if inventory_hostname == 'web05.monheim.de' %}
 #2019-08-12, mm: EE requested monheim-entdecken.de -> monheimer-kulturwerke.de (web03/web07 -> web05)
 -A 17668-server -s 192.168.7.18/32 -p tcp --dport 443 -j ACCEPT
 -A 17668-server -s 192.168.7.21/32 -p tcp --dport 443 -j ACCEPT
 -A 17668-server -s 192.168.7.42/32 -p tcp --dport 443 -j ACCEPT
+-A 17668-server -s 192.168.7.44/32 -p tcp --dport 22 -j ACCEPT
 {% endif %}
 {% if inventory_hostname == 'web07.monheim.de' %}
 #2019-09-09, mm: www.monheim-entdecken.de -> www.monheim.de (web03/web05 -> web07)
@@ -45,6 +28,7 @@ COMMIT
 -A 17668-server -s 192.168.7.21/32 -p tcp -m multiport --dports 80,443 -j ACCEPT
 # web06 -> web07
 -A 17668-server -s 192.168.7.27/32 -p tcp -m tcp --dport 443 -j ACCEPT
+-A 17668-server -s 192.168.7.44/32 -p tcp --dport 22 -j ACCEPT
 {% endif %}
 {% if inventory_hostname == 'schildweb.monheim.intern' %}
 #19956: Zugriff von pcs01 auf schildweb
