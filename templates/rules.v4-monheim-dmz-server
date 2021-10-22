@@ -30,6 +30,10 @@ COMMIT
 -A 17668-server -s 192.168.7.27/32 -p tcp -m tcp --dport 443 -j ACCEPT
 -A 17668-server -s 192.168.7.44/32 -p tcp --dport 22 -j ACCEPT
 {% endif %}
+{% if inventory_hostname in ('web08.monheim.intern', 'web09.monheim.intern') %}
+#2021-10-15: Allow web05 as jump host for darinir
+-A 17668-server -s 192.168.7.13/32 -p tcp --dport 22 -j ACCEPT
+{% endif %}
 {% if inventory_hostname == 'schildweb.monheim.intern' %}
 #19956: Zugriff von pcs01 auf schildweb
 -A 17668-server -s 192.168.7.37/32 -p tcp -m multiport --dports 80,443 -j ACCEPT
