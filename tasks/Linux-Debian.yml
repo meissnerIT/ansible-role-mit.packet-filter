@@ -10,14 +10,13 @@
   when: netfilter_persistent_service_name is not defined
 
 - name: "Ensure iptables-persistent is installed"
-  apt: pkg=iptables-persistent
-       state=latest
-       update_cache=yes
-       cache_valid_time=3600
+  apt:
+    pkg: iptables-persistent
+    state: latest
 
 - name: Update ipv4 rules
   template:
-    src: '{{ iptables_persistent_rules_v4 }}'
+    src: etc/iptables/rules.v4
     dest: /etc/iptables/rules.v4
     mode: 0640
     # Problem: For monheim we want to replace the files for dmz server but not for mit-servers
