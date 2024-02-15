@@ -3,5 +3,10 @@
 # See http://docs.ansible.com/playbooks_intro.html for more information about handlers.
 
 - name: restart netfilter-persistent
-  service: name={{ netfilter_persistent_service_name }} state=restarted
+  service:
+    name: "{{ netfilter_persistent_service_name }}"
+    state: restarted
+
+- name: save netfilter rules
+  command: netfilter-persistent save
 
