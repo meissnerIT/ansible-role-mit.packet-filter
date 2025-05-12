@@ -2,11 +2,10 @@
 # Handler to handle common notifications. Handlers are called by other plays.
 # See http://docs.ansible.com/playbooks_intro.html for more information about handlers.
 
-- name: restart netfilter-persistent
-  service:
+- name: Restart netfilter-persistent
+  ansible.builtin.service:
     name: "{{ netfilter_persistent_service_name }}"
     state: restarted
 
-- name: save netfilter rules
-  command: netfilter-persistent save
-
+- name: Save netfilter rules
+  ansible.builtin.command: netfilter-persistent save

@@ -1,10 +1,8 @@
 ---
-
-# Include distribution specific tasks, e.g. UCS will force mit-uis rules to be installed
-- include_tasks: "{{ main_item }}"
+- name: Include distribution specific tasks
+  ansible.builtin.include_tasks: "{{ main_item }}"
   with_first_found:
-    - "{{ ansible_system }}-{{ ansible_lsb.id }}.yml"
+    - "{{ ansible_system }}-{{ ansible_lsb.id }}.yml"
     - "{{ ansible_system }}-{{ ansible_distribution }}.yml"
   loop_control:
     loop_var: main_item
-

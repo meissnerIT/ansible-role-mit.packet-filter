@@ -1,9 +1,10 @@
 ---
 # common tasks for all machines
 
-- include_vars: "{{ linux_debian_item }}"
+- name: Include vars
+  ansible.builtin.include_vars: "{{ linux_debian_item }}"
   with_first_found:
-    - "../vars/{{ ansible_distribution }}-{{ ansible_distribution_major_version | int}}.yml"
+    - "../vars/{{ ansible_distribution }}-{{ ansible_distribution_major_version | int }}.yml"
     - "../vars/{{ ansible_distribution }}.yml"
     - "../vars/{{ ansible_os_family }}.yml"
     - "../vars/default.yml"
@@ -12,21 +13,20 @@
     loop_var: linux_debian_item
 
 - name: "Ensure iptables-persistent is installed"
-  apt:
-    pkg: iptables-persistent
-    state: latest
+  ansible.builtin.apt:
+    name: iptables-persistent
 
-- name: Update ipv4 rules
-  template:
-    src: etc/iptables/rules.v4
-    dest: /etc/iptables/rules.v4
-    mode: 0640
-    # Problem: For monheim we want to replace the files for dmz server but not for mit-servers
-    force: no
-  notify: restart netfilter-persistent
+# - name: Update ipv4 rules
+#   ansible.builtin.template:
+#     src: etc/iptables/rules.v4
+#     dest: /etc/iptables/rules.v4
+#     mode: "640"
+#     # Problem: This differs per customer
+#     force: false
+#   notify: restart netfilter-persistent
 
 - name: Include pre.yml
-  ansible.builtin.include_tasks: '{{ tasks_file }}'
+  ansible.builtin.include_tasks: "{{ tasks_file }}"
   when: tasks_file != ""
   vars:
     tasks_file: "{{ lookup('ansible.builtin.first_found', files, errors='ignore') }}"
@@ -34,7 +34,7 @@
       - "local/roles/{{ ansible_role_name }}/tasks/pre.yml"
 
 - name: Include inventory_hostname.yml
-  ansible.builtin.include_tasks: '{{ tasks_file }}'
+  ansible.builtin.include_tasks: "{{ tasks_file }}"
   when: tasks_file != ""
   vars:
     tasks_file: "{{ lookup('ansible.builtin.first_found', files, errors='ignore') }}"
@@ -42,10 +42,9 @@
       - "local/roles/{{ ansible_role_name }}/tasks/{{ inventory_hostname }}.yml"
 
 - name: Include post.yml
-  ansible.builtin.include_tasks: '{{ tasks_file }}'
+  ansible.builtin.include_tasks: "{{ tasks_file }}"
   when: tasks_file != ""
   vars:
     tasks_file: "{{ lookup('ansible.builtin.first_found', files, errors='ignore') }}"
     files:
       - "local/roles/{{ ansible_role_name }}/tasks/post.yml"
-
