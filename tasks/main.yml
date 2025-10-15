@@ -4,5 +4,6 @@
   with_first_found:
     - "{{ ansible_system }}-{{ ansible_lsb.id }}.yml"
     - "{{ ansible_system }}-{{ ansible_distribution }}.yml"
+    - "{{ ansible_system }}.yml"
   loop_control:
     loop_var: main_item

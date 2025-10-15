@@ -7,5 +7,11 @@
     name: "{{ netfilter_persistent_service_name }}"
     state: restarted
 
+- name: Reload pf
+  ansible.builtin.service:
+    name: pf
+    state: reloaded
+
 - name: Save netfilter rules
   ansible.builtin.command: netfilter-persistent save
+  changed_when: true

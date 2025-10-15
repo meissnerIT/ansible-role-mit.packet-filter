@@ -25,13 +25,13 @@
 #     force: false
 #   notify: restart netfilter-persistent
 
-- name: Include pre.yml
+- name: Include Linux-pre.yml
   ansible.builtin.include_tasks: "{{ tasks_file }}"
   when: tasks_file != ""
   vars:
     tasks_file: "{{ lookup('ansible.builtin.first_found', files, errors='ignore') }}"
     files:
-      - "local/roles/{{ ansible_role_name }}/tasks/pre.yml"
+      - "local/roles/{{ ansible_role_name }}/tasks/Linux-pre.yml"
 
 - name: Include inventory_hostname.yml
   ansible.builtin.include_tasks: "{{ tasks_file }}"
@@ -41,10 +41,10 @@
     files:
       - "local/roles/{{ ansible_role_name }}/tasks/{{ inventory_hostname }}.yml"
 
-- name: Include post.yml
+- name: Include Linux-post.yml
   ansible.builtin.include_tasks: "{{ tasks_file }}"
   when: tasks_file != ""
   vars:
     tasks_file: "{{ lookup('ansible.builtin.first_found', files, errors='ignore') }}"
     files:
-      - "local/roles/{{ ansible_role_name }}/tasks/post.yml"
+      - "local/roles/{{ ansible_role_name }}/tasks/Linux-post.yml"

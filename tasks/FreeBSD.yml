@@ -1,0 +1,24 @@
+---
+- name: Include FreeBSD-pre.yml
+  ansible.builtin.include_tasks: "{{ tasks_file }}"
+  when: tasks_file != ""
+  vars:
+    tasks_file: "{{ lookup('ansible.builtin.first_found', files, errors='ignore') }}"
+    files:
+      - "local/roles/{{ ansible_role_name }}/tasks/FreeBSD-pre.yml"
+
+- name: Include inventory_hostname.yml
+  ansible.builtin.include_tasks: "{{ tasks_file }}"
+  when: tasks_file != ""
+  vars:
+    tasks_file: "{{ lookup('ansible.builtin.first_found', files, errors='ignore') }}"
+    files:
+      - "local/roles/{{ ansible_role_name }}/tasks/{{ inventory_hostname }}.yml"
+
+- name: Include post.yml
+  ansible.builtin.include_tasks: "{{ tasks_file }}"
+  when: tasks_file != ""
+  vars:
+    tasks_file: "{{ lookup('ansible.builtin.first_found', files, errors='ignore') }}"
+    files:
+      - "local/roles/{{ ansible_role_name }}/tasks/FreeBSD-post.yml"
