@@ -7,3 +7,4 @@
     - "{{ ansible_system }}.yml"
   loop_control:
     loop_var: main_item
+  when: "'jails' not in ansible_virtualization_tech_guest"

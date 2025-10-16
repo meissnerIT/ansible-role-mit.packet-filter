@@ -15,7 +15,7 @@
     files:
       - "local/roles/{{ ansible_role_name }}/tasks/{{ inventory_hostname }}.yml"
 
-- name: Include post.yml
+- name: Include FreeBSD-post.yml
   ansible.builtin.include_tasks: "{{ tasks_file }}"
   when: tasks_file != ""
   vars:
